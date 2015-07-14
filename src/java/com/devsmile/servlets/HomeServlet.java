@@ -5,7 +5,6 @@
  */
 package com.devsmile.servlets;
 
-import com.devsmile.dao.ImUsuarioDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -18,7 +17,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author kelvi
  */
-public class LoginServlet extends HttpServlet {
+public class HomeServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,8 +30,10 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("/login.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        String usuario = (String)session.getAttribute("user");
+        request.setAttribute("user", usuario);
+        request.getRequestDispatcher("home.jsp").forward(request, response); 
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -59,21 +60,9 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //processRequest(request, response);
-        String password = request.getParameter("password");
-        String usuario = request.getParameter("usuario");
-	ImUsuarioDao LoginDao = new ImUsuarioDao();
-	if(LoginDao.validateUser(usuario, password)){
-            HttpSession session = request.getSession();
-            session.setAttribute("user", usuario);
-            //setting session to expiry in 30 mins
-            session.setMaxInactiveInterval(30*60);
-            response.sendRedirect("home");
-	}else{
-	    request.setAttribute("mensaje", "Error campos vacios");
-            request.getRequestDispatcher("login.jsp").forward(request, response); 
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

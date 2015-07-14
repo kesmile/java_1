@@ -4,6 +4,7 @@
     Author     : kelvi
 --%>
 
+<%@page import="java.util.Enumeration"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -26,7 +27,16 @@
                     <br>
                     <input type="password" name="password" placeholder="password" />
                     <br>
-                    ${msj}
+                    <%
+                        String mensaje = (String)request.getAttribute("mensaje");
+                        if(mensaje != null){
+                    %>
+                    <div data-alert class="alert-box alert">
+                        <% out.println(mensaje); %>
+                        <a href="#" class="close">&times;</a>
+                    </div>
+                        <% } 
+                        %>
                     <input type="submit" value="Aceptar" class="button small" />
                    </fieldset>
                 </form>

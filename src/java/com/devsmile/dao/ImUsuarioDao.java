@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.devsmile.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author kelvi
@@ -24,7 +26,19 @@ public class ImUsuarioDao implements InterfaceUsuarioDao {
 
     @Override
     public void insertarUsuario(UsuarioBean usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String query = "insert into usuarios values(null,?,?,?,?)";
+        try {
+            Connection conn = new MysqlConnect().getConnetion();
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setString(1, usuario.getUsuario());
+            st.setString(2, usuario.getPassword());
+            st.setString(3, usuario.getEmail());
+            st.setBoolean(4,usuario.isEstado());
+            st.execute();
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
